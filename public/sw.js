@@ -3,6 +3,7 @@
 
   const WebPush = {
     init () {
+      console.log('WebPush INIT')
       self.addEventListener('push', this.notificationPush.bind(this))
       self.addEventListener('notificationclick', this.notificationClick.bind(this))
       self.addEventListener('notificationclose', this.notificationClose.bind(this))
@@ -16,18 +17,20 @@
      * @param {NotificationEvent} event
      */
     notificationPush (event) {
+      console.log('pushevent')
       if (!(self.Notification && self.Notification.permission === 'granted')) {
         return
       }
 
       if (event && event.data) {
-        self.pushData = event.data.json();
+        console.log('pushevent')
+        self.pushData = event.data.json()
         if (self.pushData) {
           event.waitUntil(self.registration.showNotification(self.pushData.title, {
             body: self.pushData.body,
             icon: self.pushData.data ? self.pushData.data.icon : null
-          }).then(_=> {
-            clients.matchAll({type: 'window'}).then((clientList) => {
+          }).then(_ => {
+            clients.matchAll({ type: 'window' }).then((clientList) => {
               if (clientList.length > 0) {
                 console.log('the data', self.pushData)
                 this.messageToClient(clientList[0], self.pushData)
@@ -35,8 +38,8 @@
                 //   message: self.pushData // suppose it is: "Hello World !"
                 // });
               }
-            });
-          }));
+            })
+          }))
         }
       }
 
@@ -126,22 +129,22 @@
     },
 
     // send to client test
-    messageToClient(client, data) {
+    messageToClient (client, data) {
       console.log('messageToClient', client, data)
       return new Promise((resolve, reject) => {
-        const channel = new MessageChannel();
+        const channel = new MessageChannel()
 
         channel.port1.onmessage = (event) => {
           if (event.data.error) {
-            reject(event.data.error);
+            reject(event.data.error)
           } else {
-            resolve(event.data);
+            resolve(event.data)
           }
-        };
+        }
 
         // client.postMessage(JSON.stringify(data), [channel.port2]);
-        client.postMessage(data, [channel.port2]);
-      });
+        client.postMessage(data, [channel.port2])
+      })
     }
   }
 

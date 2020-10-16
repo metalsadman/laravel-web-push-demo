@@ -89,7 +89,7 @@ export default {
 
     this.initDropdown()
     //
-    this.addMessageListener()
+    // this.addMessageListener()
   },
 
   methods: {
@@ -143,6 +143,7 @@ export default {
      * Listen for Echo push notifications.
      */
     listen () {
+      console.log('listen echo')
       window.Echo.private(`App.User.${window.Laravel.user.id}`)
         .notification(notification => {
           this.insertNotification(notification)
@@ -196,13 +197,14 @@ export default {
     },
 
     addMessageListener () {
+      console.log('add messageListener')
       if (!('serviceWorker' in navigator)) {
         console.log('Service workers aren\'t supported in this browser.')
         return
       }
 
       navigator.serviceWorker.addEventListener('message', (event) => {
-        console.log('Message1 listener', event.data); // Hello World !
+        console.log('Message1 listener', event.data) // Hello World !
         this.insertNotification(event.data)
       })
     }

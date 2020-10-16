@@ -1805,14 +1805,19 @@ __webpack_require__.r(__webpack_exports__);
       if (!('serviceWorker' in navigator)) {
         console.log('Service workers aren\'t supported in this browser.');
         return;
+      } else {
+        console.log('Service worker supported in this browser.');
       }
 
-      navigator.serviceWorker.register('/sw.js').then(function () {
-        return _this.initialiseServiceWorker();
+      navigator.serviceWorker.register('/sw.js').then(function (register) {
+        console.log('Init service', register);
+
+        _this.initialiseServiceWorker();
       }); // //add listener
+      // console.log('add event listener')
       // navigator.serviceWorker.addEventListener('message', function (event) {
-      //   console.log('Message1 listener', event.data); // Hello World !
-      // });
+      //   console.log('Message1 listener', event.data) // Hello World !
+      // })
     },
     initialiseServiceWorker: function initialiseServiceWorker() {
       var _this2 = this;
@@ -1822,29 +1827,40 @@ __webpack_require__.r(__webpack_exports__);
       if (!('showNotification' in ServiceWorkerRegistration.prototype)) {
         console.log('Notifications aren\'t supported.');
         return;
+      } else {
+        console.log('Initialize service');
       }
 
       if (Notification.permission === 'denied') {
         console.log('The user has blocked notifications.');
         return;
+      } else {
+        console.log('412312 Permitted');
       }
 
       if (!('PushManager' in window)) {
         console.log('Push messaging isn\'t supported.');
         return;
+      } else {
+        console.log('Push messaging is supported.');
       }
 
       navigator.serviceWorker.ready.then(function (registration) {
+        console.log('serviceWorker.ready');
         registration.pushManager.getSubscription().then(function (subscription) {
           _this2.pushButtonDisabled = false;
 
           if (!subscription) {
+            console.log('subscription1', subscription);
             return;
+          } else {
+            console.log('subscription2', subscription);
           }
 
           _this2.updateSubscription(subscription);
 
           _this2.isPushEnabled = true;
+          console.log('push2');
         })["catch"](function (e) {
           console.log('Error during getSubscription()', e);
         });
@@ -1932,6 +1948,10 @@ __webpack_require__.r(__webpack_exports__);
     updateSubscription: function updateSubscription(subscription) {
       var _this5 = this;
 
+      console.log('updateSubscription', subscription);
+      navigator.serviceWorker.addEventListener('message', function (event) {
+        console.log('Message1 listener', event.data); // Hello World !
+      });
       var key = subscription.getKey('p256dh');
       var token = subscription.getKey('auth');
       var contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
@@ -2102,8 +2122,7 @@ __webpack_require__.r(__webpack_exports__);
     // }
 
     this.initDropdown(); //
-
-    this.addMessageListener();
+    // this.addMessageListener()
   },
   methods: {
     /**
@@ -2172,6 +2191,7 @@ __webpack_require__.r(__webpack_exports__);
     listen: function listen() {
       var _this2 = this;
 
+      console.log('listen echo');
       window.Echo["private"]("App.User.".concat(window.Laravel.user.id)).notification(function (notification) {
         _this2.insertNotification(notification);
       }).listen('NotificationRead', function (_ref4) {
@@ -2221,6 +2241,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     addMessageListener: function addMessageListener() {
       var _this3 = this;
+
+      console.log('add messageListener');
 
       if (!('serviceWorker' in navigator)) {
         console.log('Service workers aren\'t supported in this browser.');
@@ -39626,8 +39648,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/aldrincpc/samples/laravel-web-push-demo/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/aldrincpc/samples/laravel-web-push-demo/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! E:\BACKUP D\web-samps\laravel-web-push-demo\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! E:\BACKUP D\web-samps\laravel-web-push-demo\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

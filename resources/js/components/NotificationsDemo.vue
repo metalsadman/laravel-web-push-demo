@@ -46,14 +46,20 @@ export default {
       if (!('serviceWorker' in navigator)) {
         console.log('Service workers aren\'t supported in this browser.')
         return
+      } else {
+        console.log('Service worker supported in this browser.')
       }
 
       navigator.serviceWorker.register('/sw.js')
-        .then(() => this.initialiseServiceWorker())
+        .then((register) => {
+          console.log('Init service', register)
+          this.initialiseServiceWorker()
+        })
       // //add listener
+      // console.log('add event listener')
       // navigator.serviceWorker.addEventListener('message', function (event) {
-      //   console.log('Message1 listener', event.data); // Hello World !
-      // });
+      //   console.log('Message1 listener', event.data) // Hello World !
+      // })
     },
 
     initialiseServiceWorker () {
@@ -61,37 +67,46 @@ export default {
       if (!('showNotification' in ServiceWorkerRegistration.prototype)) {
         console.log('Notifications aren\'t supported.')
         return
+      } else {
+        console.log('Initialize service')
       }
 
       if (Notification.permission === 'denied') {
         console.log('The user has blocked notifications.')
         return
+      } else {
+        console.log('412312 Permitted')
       }
 
       if (!('PushManager' in window)) {
         console.log('Push messaging isn\'t supported.')
         return
+      } else {
+        console.log('Push messaging is supported.')
       }
 
       navigator.serviceWorker.ready.then(registration => {
+        console.log('serviceWorker.ready')
         registration.pushManager.getSubscription()
           .then(subscription => {
             this.pushButtonDisabled = false
 
             if (!subscription) {
+              console.log('subscription1', subscription)
               return
+            } else {
+              console.log('subscription2', subscription)
             }
 
             this.updateSubscription(subscription)
 
             this.isPushEnabled = true
+            console.log('push2')
           })
           .catch(e => {
             console.log('Error during getSubscription()', e)
           })
       })
-
-
     },
 
     /**
@@ -169,6 +184,11 @@ export default {
      * @param {PushSubscription} subscription
      */
     updateSubscription (subscription) {
+      console.log('updateSubscription', subscription)
+
+      navigator.serviceWorker.addEventListener('message', function (event) {
+        console.log('Message1 listener', event.data) // Hello World !
+      })
       const key = subscription.getKey('p256dh')
       const token = subscription.getKey('auth')
       const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0]
